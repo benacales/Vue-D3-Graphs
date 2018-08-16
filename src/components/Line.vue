@@ -113,8 +113,6 @@ export default {
 
         }
 
-       
-
         var arrOpened = data.opened
         var arrCompleted = data.completed
 

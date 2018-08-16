@@ -1,6 +1,6 @@
 <template>
     <div class = "histoGraph" :id="id" @mousemove="onmousemove" ref="histoGraph">
-        <svg ref = "histoGraphSVG" width="500" height="300"></svg>
+        <svg ref = "histoGraphSVG" width="1000" height="600" style="padding-left: 40px ; padding-top: 10px"></svg>
     </div>
 </template>
 
@@ -25,8 +25,8 @@ export default {
     mounted() {
         var data = this.data,
         svg = d3.select(`#${this.id} > svg`)
-
-        var margin = {top: 10, right: 30, bottom: 40, left: 60},
+        var margin = {top: 10, right: 30, bottom: 40, left: 60}
+        var padding = {top: 10, right: 0, bottom: 0, left: 40},
         width = svg.attr('width') - margin.left - margin.right - 30,
         height = svg.attr('height') - margin.top - margin.bottom - 30;
 
@@ -49,7 +49,7 @@ export default {
         svg
             .append("g")
             .attr("transform",
-                "translate(" + margin.left + "," + margin.top + ")")
+                "translate(" + margin.left + "," + margin.top + ")");                
 
         var div = d3.select(`#${this.id}`).append('div')
             .attr("class", "tooltip")				
@@ -102,7 +102,6 @@ export default {
             y.domain([0, maxY]);
 
 
-            
             svg.selectAll("rect")
                 .data(bins)
                 .enter().append("rect")
@@ -142,11 +141,11 @@ export default {
                 // var divBorders = {minX: divPos.x, maxX: divPos.x + width, minY: divPos.y, maxY: divPos.y + height}
 
                 // if((margin.left < x  && x < (width + margin.left)) && ( 0 < y  && y < height)){
-                if (divPos.x < x && x < (divPos.x + width) && divPos.y < y && y < (divPos.y + height) ) {
+                if ((divPos.x + padding.left) < x && x < (divPos.x + width + padding.left) && (divPos.y + padding.top) < y && y < (divPos.y + height + padding.top) ) {
 
                     var rectWidth = width/arrTicks.length;
                 
-                    var xPosition = x - divPos.x
+                    var xPosition = x - divPos.x - padding.left
                     
                     var index = Math.floor(xPosition / rectWidth)
                     
@@ -154,7 +153,7 @@ export default {
                         .duration(180)
                         .style("opacity", .9)
                     div.html(arrTicks[index])
-                        .style("left", (x - divPos.x + 15) + "px")
+                        .style("left", (x - divPos.x + 15 - padding.left) + "px")
                         .style("top", (y - 25) + "px")
 
                 }
